@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Watch Kart</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: Arial, sans-serif;
+      overflow-x: hidden;
+      background-color: black;
+    }
+
+    header {
+      background-color: #111;
+      color: white;
+      padding: 1rem 2rem;
+      position: relative;
+      z-index: 1001;
+    }
+
+    nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .logo svg {
+      width: 24px;
+      height: 24px;
+      fill: white;
+      margin-right: 0.5rem;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+      background: linear-gradient(90deg, rgba(255, 0, 150, 1), rgba(0, 204, 255, 1)); 
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo:hover {
+      transform: scale(1.3);
+    }
+
+    .hamburger {
+      font-size: 2rem;
+      cursor: pointer;
+      display: none;
+      color: white;
+      z-index: 1002;
+    }
+
+    #menu-toggle {
+      display: none;
+    }
+
+    .menu {
+      display: flex;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .menu a {
+      color: white;
+      text-decoration: none;
+      padding: 0.5rem;
+      position: relative;
+      transition: all 0.3s ease-in-out;
+    }
+
+    .menu a:hover {
+      color: yellow;
+      transform: scale(1.1);
+    }
+
+    .menu a::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 100%;
+      height: 2px;
+      background-color: aqua;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .menu a:hover::after {
+      opacity: 1;
+    }
+
+    section {
+      padding: 2rem;
+      text-align: center;
+    }
+
+    footer {
+      background: #f4f4f4;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .hero-container {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      overflow: hidden;
+      border-radius: 30px;
+    }
+
+    .hero-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.7);
+      border: 3px solid rgba(255, 255, 255, 0.5);
+    }
+
+    .hero-container h1 {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2.5rem;
+      font-weight: bold;
+      color: aqua;
+      padding: 0 20px;
+      text-align: center;
+    }
+
+    #heading2 {
+      text-align: left;
+      font-size: 2rem;
+      margin-top: 15px;
+      margin-bottom: 20px;
+      padding: 10px 15px;
+      background-image: linear-gradient(to left, #ff6a00, #ee0979);
+      background-clip: text;
+      -webkit-background-clip: text;
+      color: transparent;
+      border-left: 4px solid #00c6ff;
+    }
+
+    .cards-section {
+      overflow-x: auto;
+      white-space: nowrap;
+      padding: 20px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      max-width: 100vw;
+      cursor: grab;
+    }
+
+    .cards-section::-webkit-scrollbar {
+      display: none;
+    }
+
+    .card {
+      position: relative;
+      display: inline-block;
+      vertical-align: top;
+      width: 300px;
+      height: 200px;
+      margin-right: 16px;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0px 2px 6px rgba(0, 0, 0, 0.7);
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: scale(1.05);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: -12px;
+      left: -12px;
+      right: -12px;
+      bottom: -12px;
+      background: conic-gradient(from 0deg, #00f0ff, #ff00ff, #00f0ff);
+      border-radius: 24px;
+      z-index: 1;
+      animation: none;
+    }
+
+    .card:hover::before {
+      animation: rotate-border 3s linear infinite;
+    }
+
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #1e1e1e;
+      border-radius: 15px;
+      z-index: 2;
+      margin: 8px;
+    }
+
+    .card img {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 3;
+      width: 95%;
+      height: 95%;
+      object-fit: cover;
+      background-color: #222;
+      display: block;
+      border-radius: 10px;
+    }
+
+    @keyframes rotate-border {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ----------------------------- */
+    /* MEDIA QUERIES FOR RESPONSIVE */
+    /* ----------------------------- */
+
+    @media (max-width: 1024px) {
+      .hero-container h1 {
+        font-size: 2.2rem;
+        text-align: center;
+      }
+
+      .card {
+        width: 260px;
+        height: 180px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .menu {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background-color: #111;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        display: none;
+        z-index: 1000;
+      }
+
+      .hamburger {
+        display: block;
+      }
+
+      #menu-toggle:checked ~ .menu {
+        display: flex;
+      }
+
+      .menu a {
+        font-size: 1.5rem;
+        padding: 1rem;
+        border-bottom: 1px solid #333;
+      }
+
+      .hero-container {
+        height: 300px;
+      }
+
+      .hero-container h1 {
+        font-size: 1.8rem;
+        padding: 0 10px;
+      }
+
+      .card {
+        width: 250px;
+        height: 170px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      header {
+        padding: 1rem;
+      }
+
+      .logo {
+        font-size: 1.2rem;
+      }
+
+      .hero-container {
+        height: 250px;
+      }
+
+      .hero-container h1 {
+        font-size: 1.5rem;
+      }
+
+      .card {
+        width: 220px;
+        height: 150px;
+      }
+
+      #heading2 {
+        font-size: 1.3rem;
+      }
+    }
+
+    .my-loader {
+  width: 40px;
+  height: 40px;
+  perspective: 800px;
+  margin-right:8px;
+}
+
+.rubiks-cube {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  animation: my-rotateCube 4s infinite linear;
+}
+
+.my-loader .face {
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+  height: 100%;
+}
+
+.my-loader .face.front  { transform: translateZ(20px); }
+.my-loader .face.back   { transform: rotateY(180deg) translateZ(20px); }
+.my-loader .face.left   { transform: rotateY(-90deg) translateZ(20px); }
+.my-loader .face.right  { transform: rotateY(90deg) translateZ(20px); }
+.my-loader .face.top    { transform: rotateX(90deg) translateZ(20px); }
+.my-loader .face.bottom { transform: rotateX(-90deg) translateZ(20px); }
+
+.my-loader .cube {
+  width: calc(100% / 3);
+  height: calc(100% / 3);
+  box-sizing: border-box;
+  border: 1px solid #000;
+}
+
+@keyframes my-rotateCube {
+  0%   { transform: rotateX(0deg) rotateY(0deg); }
+  100% { transform: rotateX(360deg) rotateY(360deg); }
+}
+
+
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+     <div class="logo">
+  <div class="my-loader">
+    <div class="rubiks-cube">
+      <div class="face front">
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+      </div>
+      <div class="face back">
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+      </div>
+      <div class="face left">
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+      </div>
+      <div class="face right">
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+      </div>
+      <div class="face top">
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+      </div>
+      <div class="face bottom">
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+        <div style="background: #ffeb3b;" class="cube"></div>
+        <div style="background: #4caf50;" class="cube"></div>
+        <div style="background: #2196f3;" class="cube"></div>
+        <div style="background: #ffffff;" class="cube"></div>
+        <div style="background: #ff3d00;" class="cube"></div>
+      </div>
+    </div>
+  </div>
+   WatchKart
+</div>
+
+      <input type="checkbox" id="menu-toggle" />
+      <label for="menu-toggle" class="hamburger">&#9776;</label>
+
+      <div class="menu">
+        <a href="#">Home</a>
+        <a href="#">About</a>
+        <a href="#">Services</a>
+        <a href="#">Contact</a>
+        <a href="#">Popular Trends</a>
+      </div>
+    </nav>
+  </header>
+
+  <section>
+    <div class="hero-container">
+      <img src="images/watch-intro.jpg" alt="watch-header" />
+      <h1 id="heading">Welcome to WatchKart - The Elegant Choice for Watch Enthusiasts!</h1>
+    </div>
+  </section>
+
+  <section>
+    <h1 id="heading2">Style Wear</h1>
+    <div class="cards-section">
+      <div class="card"><img src="casio-logo.jpg" alt="img1" /></div>
+      <div class="card"><img src="fossil-logo.png" alt="img2" /></div>
+      <div class="card"><img src="titan-logo.png" alt="img3" /></div>
+      <div class="card"><img src="seiko-logo.webp" alt="img4" /></div>
+      <div class="card"><img src="tissot-logo.jpg" alt="img5" /></div>
+      <div class="card"><img src="boat.jpg" alt="img6" /></div>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 WatchKart. All rights reserved.</p>
+  </footer>
+
+</body>
+</html>
